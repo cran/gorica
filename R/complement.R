@@ -7,7 +7,6 @@ comp <-
            logLik,
            restrictedest,
            wt_bar) {
-
     if(nec > 0L) {
       constr.ceq <- constr[1:nec, , drop = FALSE]
       rhs.ceq <- rhs[1:nec]
@@ -87,9 +86,9 @@ comp <-
       betasc <- est # was x
     } else if (all(c(constr) == 0L)) {
       # unconstrained setting
-      stop("Restriktor ERROR: no complement exists for the unrestricted hypothesis.")
+      stop("No complement exists for the unrestricted hypothesis.")
     } else {
-      stop("Restriktor ERROR: you might have found a bug, please contact me!")
+      stop("You might have found a bug, please contact the package maintainer.")
     }
 
     # compute free parameters f in the complement
@@ -101,10 +100,9 @@ comp <-
     # free parameters. Note that constr includes q1 and q2 constraints
     f <- p - nrow(constr) # p - q1 - q2
     idx <- length(wt_bar)
-
     # compute penalty term value PTc
     # Gorica heeft geen atrribute "method". Volgens mij zijn pmvnorm de juiste weights?
-    PTc <- as.numeric(1 + p - wt_bar[idx] * lq1)
+    PTc <- as.numeric(p - wt_bar[idx] * lq1)
 
 
     # complement

@@ -2,9 +2,22 @@
 % Please edit documentation in R/gorica_methods.R
 \name{gorica}
 \alias{gorica}
+\alias{gorica.lavaan}
+\alias{gorica.table}
 \title{Evaluate informative hypotheses using the GORICA}
 \usage{
-gorica(x, hypothesis, comparison = "unconstrained", ...)
+gorica(x, hypothesis, comparison = "unconstrained", iterations = 1e+05, ...)
+
+\method{gorica}{lavaan}(
+  x,
+  hypothesis,
+  comparison = "unconstrained",
+  iterations = 1e+05,
+  ...,
+  standardize = FALSE
+)
+
+\method{gorica}{table}(x, hypothesis, comparison = "unconstrained", ...)
 }
 \arguments{
 \item{x}{An R object containing the outcome of a statistical analysis.
@@ -27,8 +40,14 @@ evaluate (see Details).}
 should be compared to. Defaults to \code{comparison = "unconstrained"};
 options include \code{c("unconstrained", "complement", "none")}.}
 
+\item{iterations}{Integer. Number of samples to draw from the parameter space
+when computing the \code{gorica} penalty.}
+
 \item{...}{Additional arguments passed to the internal function
 \code{compare_hypotheses}.}
+
+\item{standardize}{Logical. For \code{lavaan} objects, whether or not to
+extract the standardized model coefficients. Defaults to \code{FALSE}.}
 }
 \value{
 An object of class \code{gorica}, containing the following elements:
@@ -47,6 +66,11 @@ importance of one hypothesis over another hypothesis.
 \code{estimates}.
 \item \code{comparison}  Which alternative hypothesis was used.
 \item \code{hypotheses}  The hypotheses evaluated in \code{fit}.
+\item \code{relative_weights}  The relative weights of each hypothesis (rows)
+versus each other hypothesis in the set (cols). The diagonal is equal to one,
+as each hypothesis is equally likely as itself. A value of, e.g., 6, means
+that the hypothesis in the row is 6 times more likely than the hypothesis in
+the column.
 }
 }
 \description{
@@ -126,6 +150,18 @@ a > 2} do not exist. It is the responsibility of the user to ensure that the
 hypotheses specified are possible. If not, \code{gorica} will either return an
 error message or render an output table containing \code{Inf}'s.
 }
+\section{Contingency tables}{
+
+When specifying hypotheses about contingency tables, the asymptotic
+covariance matrix of the model estimates is derived by means of
+bootstrapping. This makes it possible for users to define derived parameters:
+For example, a ratio between cell probabilities. For this purpose, the
+\code{\link[bain]{bain}} syntax has been enhanced with the command \code{:=}.
+Thus, the syntax \code{"a := x[1,1]/(x[1,1]+x[1,2])"} defines a new parameter
+\code{a} by reference to specific cells of the table \code{x}. This new
+parameter can now be named in hypotheses.
+}
+
 \examples{
 \dontshow{
 # EXAMPLE 1. One-sample t test
@@ -137,7 +173,7 @@ aov1 <- aov(yield ~ block-1 + N * P + K, npk)
 gorica(aov1,hypothesis="block1=block5;
    K1<0", iterations = 5)
 
-# EXAMPLE 3. gml
+# EXAMPLE 3. glm
 counts <- c(18,17,15,20,10,20,25,13,12)
 outcome <- gl(3,1,9)
 treatment <- gl(3,3)
@@ -162,7 +198,7 @@ aov1 <- aov(yield ~ block-1 + N * P + K, npk)
 gorica(aov1,hypothesis="block1=block5;
    K1<0")
 
-# EXAMPLE 3. gml
+# EXAMPLE 3. glm
 counts <- c(18,17,15,20,10,20,25,13,12)
 outcome <- gl(3,1,9)
 treatment <- gl(3,3)
@@ -189,18 +225,23 @@ John Wiley and Sons.
 
 Kuiper, R. M., Hoijtink, H., & Silvapulle, M. J. (2011).
 An Akaike-type information criterion for model selection under inequality
-constraints. Biometrika, 98, 495-501. doi:10.1093/biomet/asr002
+constraints. Biometrika, 98, 495-501.
+<https://academic.oup.com/biomet/article/98/2/495/264032>
 
 Kuiper, R. M., Hoijtink, H., & Silvapulle, M. J. (2012).
 Generalization of the order-restricted information criterion for multivariate
 normal linear models. Journal of statistical planning and inference, 142(8),
-2454-2463. \href{https://doi.org/10.1016/j.jspi.2012.03.007}{
-doi:10.1016/j.jspi.2012.03.007}
+2454-2463. \doi{10.1016/j.jspi.2012.03.007}
+
+Vanbrabant, L., Van Loey, N., and Kuiper, R.M. (2019).
+Evaluating a theory-based hypothesis against its complement using an AIC-type
+information criterion with an application to facial burn injury.
+Psychological Methods. \doi{10.1037/met0000238}
 
 McCullagh, P. & Nelder, J. (1989). Generalized linear models (2nd ed.). Boca
 Raton, FL: Chapman & Hall / CRC.
 
-McCullogh, C. E., & Searle, S. R. (2001). Generalized linear and mixed
+McCulloch, C. E., & Searle, S. R. (2001). Generalized linear and mixed
 models. New York, NY: Wiley.
 }
 \author{

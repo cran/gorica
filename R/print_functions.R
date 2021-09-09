@@ -30,3 +30,14 @@ print.gorica <- function(x,
     warning("Gorica analysis returned the following warnings:\n  ", paste(1:length(x$warnings), ". ", x$warnings, sep = "", collapse = "\n  "))
   }
 }
+
+
+print.ormle <- function(x, digits = max(3, getOption("digits") - 3), ...){
+  cat("\n$est\n")
+  print(x$est)
+  cat("\n")
+  cat("\n$restrictedest\n")
+  print(x$restrictedest)
+  cat("\n")
+  invisible(x)
+}
