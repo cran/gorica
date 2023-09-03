@@ -1,7 +1,6 @@
 #' Academic awards data
 #'
-#' Simulated dataset from
-#' \url{https://stats.idre.ucla.edu/sas/dae/poisson-regression/}.
+#' Simulated dataset based on the UCLA Statistical Consulting Group's website.
 #'
 #' \tabular{lll}{
 #'   \strong{num_awards} \tab \code{integer} \tab Outcome variable; indicates the number of
@@ -16,5 +15,8 @@
 #' @keywords datasets
 #' @name academic_awards
 #' @usage data(academic_awards)
+#' @references Introduction to SAS. UCLA: Statistical Consulting Group. from
+#' https://stats.oarc.ucla.edu/sas/modules/introduction-to-the-features-of-sas/
+#' (accessed August 22, 2021).
 #' @format A data frame with 200 rows and 4 variables.
 NULL

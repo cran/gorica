@@ -11,8 +11,7 @@ A data frame with 200 rows and 4 variables.
 data(academic_awards)
 }
 \description{
-Simulated dataset from
-\url{https://stats.idre.ucla.edu/sas/dae/poisson-regression/}.
+Simulated dataset based on the UCLA Statistical Consulting Group's website.
 }
 \details{
 \tabular{lll}{
@@ -24,5 +23,10 @@ awards earned by students at a high school in a year \cr
   the type of program in which the students were enrolled:
   "General", "Academic", or "Vocational".
 }
+}
+\references{
+Introduction to SAS. UCLA: Statistical Consulting Group. from
+https://stats.oarc.ucla.edu/sas/modules/introduction-to-the-features-of-sas/
+(accessed August 22, 2021).
 }
 \keyword{datasets}
